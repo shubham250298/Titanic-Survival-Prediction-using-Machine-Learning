@@ -27,7 +27,7 @@ Can we create new features based on an existing feature or a set of features, su
 ### Charting
 How to select the right visualization plots and charts depending on nature of the data and the solution goals.
 
-##[Acquire data]
+#[Acquire data]
 The Python Pandas packages helps us work with our datasets. We start by acquiring the training and testing datasets into Pandas DataFrames. We also combine these datasets to run certain operations on both datasets together.
 
 
