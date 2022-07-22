@@ -289,9 +289,9 @@ We can now rank our evaluation of all the models to choose the best one for our 
 	Model 	Score
 
 
-1	KNN	                             84.74
-0	Support VectorMachine            83.84
-2	Logistic Regression            	 80.36
+## 1	KNN	                             84.74
+## 0	Support VectorMachine                83.84
+## 2	Logistic Regression            	     80.36
 
 
 
