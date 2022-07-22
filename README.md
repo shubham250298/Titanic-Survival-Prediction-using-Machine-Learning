@@ -21,4 +21,18 @@ Creating. Can we create new features based on an existing feature or a set of fe
 
 Charting. How to select the right visualization plots and charts depending on nature of the data and the solution goals.
 
+[Acquire data]
+The Python Pandas packages helps us work with our datasets. We start by acquiring the training and testing datasets into Pandas DataFrames. We also combine these datasets to run certain operations on both datasets together.
+
+
+Which features contain blank, null or empty values?
+
+These will require correcting.
+
+Cabin > Age > Embarked features contain a number of null values in that order for the training dataset.
+Cabin > Age are incomplete in case of test dataset
+
+
+
+
 
