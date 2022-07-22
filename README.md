@@ -38,7 +38,17 @@ These will require correcting.
 Cabin > Age > Embarked features contain a number of null values in that order for the training dataset.
 Cabin > Age are incomplete in case of test dataset
 
+# Which features are categorical?
 
+These values classify the samples into sets of similar samples. Within categorical features are the values nominal, ordinal, ratio, or interval based? Among other things this helps us select the appropriate plots for visualization.
+
+Categorical: Survived, Sex, and Embarked. Ordinal: Pclass.
+Which features are numerical?
+
+# Which features are numerical? 
+These values change from sample to sample. Within numerical features are the values discrete, continuous, or timeseries based? Among other things this helps us select the appropriate plots for visualization.
+
+Continous: Age, Fare. Discrete: SibSp, Parch.
 
 
 
