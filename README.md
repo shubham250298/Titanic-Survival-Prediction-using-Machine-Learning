@@ -134,5 +134,165 @@ Sex We confirm the observation during problem definition that Sex=female had ver
 SibSp and Parch These features have zero correlation for certain values. It may be best to derive a feature or a set of features from these individual features (creating #1).
 
 
+# Analyze by visualizing data
+Now we can continue confirming some of our assumptions using visualizations for analyzing the data.
+
+# Correlating numerical features
+Let us start by understanding correlations between numerical features and our solution goal (Survived).
+
+A histogram chart is useful for analyzing continous numerical variables like Age where banding or ranges will help identify useful patterns. The histogram can indicate distribution of samples using automatically defined bins or equally ranged bands. This helps us answer questions relating to specific bands (Did infants have better survival rate?)
+
+Note that x-axis in historgram visualizations represents the count of samples or passengers.
+
+# Observations.
+
+Infants (Age <=4) had high survival rate.
+Oldest passengers (Age = 80) survived.
+Large number of 15-25 year olds did not survive.
+Most passengers are in 15-35 age range.
+# Decisions.
+
+This simple analysis confirms our assumptions as decisions for subsequent workflow stages.
+
+We should consider Age (our assumption classifying #2) in our model training.
+Complete the Age feature for null values (completing #1).
+We should band age groups (creating #3).
+
+
+
+Correlating numerical and ordinal features
+We can combine multiple features for identifying correlations using a single plot. This can be done with numerical and categorical features which have numeric values.
+
+# Observations.
+
+Pclass=3 had most passengers, however most did not survive. Confirms our classifying assumption #2.
+Infant passengers in Pclass=2 and Pclass=3 mostly survived. Further qualifies our classifying assumption #2.
+Most passengers in Pclass=1 survived. Confirms our classifying assumption #3.
+Pclass varies in terms of Age distribution of passengers.
+# Decisions.
+
+Consider Pclass for model training.
+
+
+Correlating categorical features
+Now we can correlate categorical features with our solution goal.
+
+# Observations.
+
+Female passengers had much better survival rate than males. Confirms classifying (#1).
+Exception in Embarked=C where males had higher survival rate. This could be a correlation between Pclass and Embarked and in turn Pclass and Survived, not necessarily direct correlation between Embarked and Survived.
+Males had better survival rate in Pclass=3 when compared with Pclass=2 for C and Q ports. Completing (#2).
+Ports of embarkation have varying survival rates for Pclass=3 and among male passengers. Correlating (#1).
+# Decisions.
+
+Add Sex feature to model training.
+Complete and add Embarked feature to model training
+
+
+# Correlating categorical and numerical features
+We may also want to correlate categorical features (with non-numeric values) and numeric features. We can consider correlating Embarked (Categorical non-numeric), Sex (Categorical non-numeric), Fare (Numeric continuous), with Survived (Categorical numeric).
+
+# Observations.
+
+Higher fare paying passengers had better survival. Confirms our assumption for creating (#4) fare ranges.
+Port of embarkation correlates with survival rates. Confirms correlating (#1) and completing (#2).
+# Decisions.
+
+Consider banding Fare feature
+
+
+# Wrangle data
+We have collected several assumptions and decisions regarding our datasets and solution requirements. So far we did not have to change a single feature or value to arrive at these. Let us now execute our decisions and assumptions for correcting, creating, and completing goals.
+
+## Correcting by dropping features
+This is a good starting goal to execute. By dropping features we are dealing with fewer data points. Speeds up our notebook and eases the analysis.
+
+Based on our assumptions and decisions we want to drop the Cabin (correcting #2) and Ticket (correcting #1) features.
+
+Note that where applicable we perform operations on both training and testing datasets together to stay consistent
+
+
+# Creating new feature extracting from existing
+We want to analyze if Name feature can be engineered to extract titles and test correlation between titles and survival, before dropping Name and PassengerId features.
+
+In the following code we extract Title feature using regular expressions. The RegEx pattern (\w+\.) matches the first word which ends with a dot character within Name feature. The expand=False flag returns a DataFrame.
+
+## Observations.
+
+When we plot Title, Age, and Survived, we note the following observations.
+
+Most titles band Age groups accurately. For example: Master title has Age mean of 5 years.
+Survival among Title Age bands varies slightly.
+Certain titles mostly survived (Mme, Lady, Sir) or did not (Don, Rev, Jonkheer).
+## Decision.
+
+We decide to retain the new Title feature for model training.
+
+
+
+# Converting a categorical feature
+Now we can convert features which contain strings to numerical values. This is required by most model algorithms. Doing so will also help us in achieving the feature completing goal.
+
+Let us start by converting Sex feature to a new feature called Gender where female=1 and male=0.
+
+# Completing a numerical continuous feature
+Now we should start estimating and completing features with missing or null values. We will first do this for the Age feature.
+
+We can consider three methods to complete a numerical continuous feature.
+
+A simple way is to generate random numbers between mean and standard deviation.
+
+More accurate way of guessing missing values is to use other correlated features. In our case we note correlation among Age, Gender, and Pclass. Guess Age values using median values for Age across sets of Pclass and Gender feature combinations. So, median Age for Pclass=1 and Gender=0, Pclass=1 and Gender=1, and so on...
+
+Combine methods 1 and 2. So instead of guessing age values based on median, use random numbers between mean and standard deviation, based on sets of Pclass and Gender combinations.
+
+Method 1 and 3 will introduce random noise into our models. The results from multiple executions might vary. We will prefer method 2
+
+
+# Quick completing and converting a numeric feature
+We can now complete the Fare feature for single missing value in test dataset using mode to get the value that occurs most frequently for this feature. We do this in a single line of code.
+
+Note that we are not creating an intermediate new feature or doing any further analysis for correlation to guess missing feature as we are replacing only a single value. The completion goal achieves desired requirement for model algorithm to operate on non-null values.
+
+We may also want round off the fare to two decimals as it represents currency.
+
+# Model, predict and solve
+Now we are ready to train a model and predict the required solution. There are 60+ predictive modelling algorithms to choose from. We must understand the type of problem and solution requirement to narrow down to a select few models which we can evaluate. Our problem is a classification and regression problem. We want to identify relationship between output (Survived or not) with other variables or features (Gender, Age, Port...). We are also perfoming a category of machine learning which is called supervised learning as we are training our model with a given dataset. With these two criteria - Supervised Learning plus Classification and Regression, we can narrow down our choice of models to a few. These include:
+
+## 1.Logistic Regression
+## 2.KNN or k-Nearest Neighbors
+## 3.Support Vector Machines
+
+
+
+We can use Logistic Regression to validate our assumptions and decisions for feature creating and completing goals. This can be done by calculating the coefficient of the features in the decision function.
+
+Positive coefficients increase the log-odds of the response (and thus increase the probability), and negative coefficients decrease the log-odds of the response (and thus decrease the probability).
+
+Sex is highest positivie coefficient, implying as the Sex value increases (male: 0 to female: 1), the probability of Survived=1 increases the most.
+Inversely as Pclass increases, probability of Survived=1 decreases the most.
+This way Age*Class is a good artificial feature to model as it has second highest negative correlation with Survived.
+So is Title as second highest positive correlation.
+
+
+
+## Next we model using Support Vector Machines which are supervised learning models with associated learning algorithms that analyze data used for classification and regression analysis. Given a set of training samples, each marked as belonging to one or the other of two categories, an SVM training algorithm builds a model that assigns new test samples to one category or the other, making it a non-probabilistic binary linear classifier
+
+
+## In pattern recognition, the k-Nearest Neighbors algorithm (or k-NN for short) is a non-parametric method used for classification and regression. A sample is classified by a majority vote of its neighbors, with the sample being assigned to the class most common among its k nearest neighbors (k is a positive integer, typically small). If k = 1, then the object is simply assigned to the class of that single nearest neighbor
+
+# Model evaluation
+We can now rank our evaluation of all the models to choose the best one for our problem. While both Decision Tree and Random Forest score the same, we choose to use Random Forest as they correct for decision trees' habit of overfitting to their training set.
+
+
+
+	Model 	Score
+
+
+1	KNN	                             84.74
+0	Support VectorMachine            83.84
+2	Logistic Regression            	 80.36
+
+
 
 
